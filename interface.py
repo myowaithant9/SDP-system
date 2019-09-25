@@ -93,7 +93,7 @@ class Toplevel1:
         _ana2color = '#ececec' # Closest X11 color: 'gray92'
 
         top.geometry("868x507+321+158")
-        top.title("New Toplevel")
+        top.title("SDP System")
         top.configure(background="#a6ddf4")
         top.configure(highlightbackground="#d9d9d9")
         top.configure(highlightcolor="black")
