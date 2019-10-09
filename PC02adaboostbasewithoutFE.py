@@ -252,7 +252,7 @@ if __name__ == '__main__':
     print('er_train', er_train)
     print('er_test', er_test)
 
-    x_range = range(0, 40, 5)
+    x_range = range(0, 40, 1)
     for i in x_range:    
         er_i = adaboost_clf(Y_train, X_train, Y_test, X_test, i, clf_tree)
         print('er_i'+ str(i) +'-->', er_i)

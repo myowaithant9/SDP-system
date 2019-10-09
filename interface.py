@@ -349,29 +349,19 @@ class selectData:
         global dataset_path
         global datactrl
         print('self.TCombobox1.get()-->', self.TCombobox1.get())
-        if self.TCombobox1.get() == "PC1":
+        if self.TCombobox1.get() == "MW1":
             datactrl = 1
-            dataset_path = 'MDP csv/PC01.csv'
-            dataset = pd.read_csv(dataset_path)
-
-        if self.TCombobox1.get() == "PC2":
-            datactrl = 2
-            dataset_path = 'MDP csv/PC02.csv'
+            dataset_path = 'MDP csv/MW1clean.csv'
             dataset = pd.read_csv(dataset_path)
 
         if self.TCombobox1.get() == "PC3":
-            datactrl = 3
-            dataset_path = 'MDP csv/PC03.csv'
+            datactrl = 2
+            dataset_path = 'MDP csv/PC3clean.csv'
             dataset = pd.read_csv(dataset_path)
 
         if self.TCombobox1.get() == "PC4":
-            datactrl = 4
-            dataset_path = 'MDP csv/PC04.csv'
-            dataset = pd.read_csv(dataset_path)
-
-        if self.TCombobox1.get() == "PC5":
-            datactrl = 5
-            dataset_path = 'MDP csv/PC05.csv'
+            datactrl = 3
+            dataset_path = 'MDP csv/PC4clean.csv'
             dataset = pd.read_csv(dataset_path)
 
         print("dataset_path-->", dataset_path)
@@ -404,6 +394,7 @@ class selectData:
         tree.pack()
 
         for i in range(dataset.shape[0]):
+            np.set_printoptions(formatter={'float_kind':'{:0f}'.format})
             print('val', dataset.values[i, :])
             tree.insert("", 0, values= dataset.values[i, :])
 
@@ -576,7 +567,7 @@ class selectData:
         self.TCombobox1.place(relx=0.264, rely=0.214, relheight=0.052
                 , relwidth=0.319)
         # self.TCombobox1.configure(textvariable=interface_support.combobox)
-        self.TCombobox1['values']=("PC1", 'PC2', 'PC3', 'PC4', 'PC5')
+        self.TCombobox1['values']=("MW1", 'PC3', 'PC4')
         # self.TCombobox1['values']=(1,2,3)
         self.TCombobox1.configure(takefocus="")
 
@@ -1219,14 +1210,14 @@ Comparison Chart
         self.Label1.configure(text='''Select Model''')
 
         self.TCombobox2 = ttk.Combobox(self.Frame2)
-        self.TCombobox2.place(relx=0.264, rely=0.214, relheight=0.052
+        self.TCombobox2.place(relx=0.224, rely=0.214, relheight=0.052
                 , relwidth=0.319)
         # self.TCombobox1.configure(textvariable=interface_support.combobox)
-        self.TCombobox2["values"]=("SVM", "Hybrid Approach", "Compare both methods")
+        self.TCombobox2["values"]=("SVM", "SVM + MRMR", "Hybrid Approach", "Hybrid Approach + MRMR", "Compare these methods")
         self.TCombobox2.configure(takefocus="")
 
         self.Button8 = tk.Button(self.Frame2)
-        self.Button8.place(relx=0.62, rely=0.204, height=31, width=113)
+        self.Button8.place(relx=0.58, rely=0.204, height=31, width=113)
         self.Button8.configure(activebackground="#ececec")
         self.Button8.configure(activeforeground="#000000")
         self.Button8.configure(background="#d9d9d9")
@@ -1235,21 +1226,50 @@ Comparison Chart
         self.Button8.configure(highlightbackground="#d9d9d9")
         self.Button8.configure(highlightcolor="black")
         self.Button8.configure(relief="raised")
-        self.Button8.configure(text='''Predict''')
-        self.Button8.configure(command=self.fun)
+        self.Button8.configure(text='''Test Predict''')
+        self.Button8.configure(command=self.testfun)
+
+        self.Button9 = tk.Button(self.Frame2)
+        self.Button9.place(relx=0.78, rely=0.204, height=31, width=125)
+        self.Button9.configure(activebackground="#ececec")
+        self.Button9.configure(activeforeground="#000000")
+        self.Button9.configure(background="#d9d9d9")
+        self.Button9.configure(font="-family {Al Bayan} -size 16")
+        self.Button9.configure(foreground="blue")
+        self.Button9.configure(highlightbackground="#d9d9d9")
+        self.Button9.configure(highlightcolor="black")
+        self.Button9.configure(relief="raised")
+        self.Button9.configure(text='''Custom Predict''')
+        self.Button9.configure(command=self.cusfun)
 
     def fun(self, top=None):
         global modelctrl
         print('self.TCombobox2.get()', self.TCombobox2.get())
         if self.TCombobox2.get() == "SVM":
-            modelctrl = 0
-            outcome_ui = outcome()
-        if self.TCombobox2.get() == "Hybrid Approach":
             modelctrl = 1
-            show_feature = showFeature()
-        if self.TCombobox2.get() == "Compare both methods":
-            modelctrl = 2
             outcome_ui = outcome()
+        elif self.TCombobox2.get() == "SVM + MRMR":
+            modelctrl = 2
+            show_feature = showFeature()        
+        elif self.TCombobox2.get() == "Hybrid Approach":
+            modelctrl = 3
+            outcome_ui = outcome()
+        elif self.TCombobox2.get() == "Hybrid Approach + MRMR":
+            modelctrl = 4
+            show_feature = showFeature()     
+        elif self.TCombobox2.get() == "Compare these methods":
+            modelctrl = 5
+            outcome_ui = outcome()
+            
+    def testfun(self, top=None):
+        global cusmodel
+        cusmodel = 0
+        self.fun()
+
+    def cusfun(self, top=None):
+        global cusmodel
+        cusmodel = 1
+        self.fun()
 
     def __init__(self, top=None):
         self.ui()
@@ -1630,6 +1650,401 @@ class showFeature:
         # self.Label13.configure(justify='left')
         # f10 = "10. "+ pre_dataset.columns[feature_extraction[0][9]]
         # self.Label13.configure(text=f10)
+    def cusui(self, top=None):
+    # -----------------------------siedebar start-----------------------------#
+        self.Frame1 = tk.Frame(top)
+        self.Frame1.place(relx=0.0, rely=-0.02, relheight=1.036, relwidth=0.259)
+        self.Frame1.configure(relief='groove')
+        self.Frame1.configure(borderwidth="2")
+        self.Frame1.configure(relief="groove")
+        self.Frame1.configure(background="#21b5ff")
+        self.Frame1.configure(highlightbackground="#d9d9d9")
+        self.Frame1.configure(highlightcolor="black")
+
+        self.Label2 = tk.Label(self.Frame1)
+        self.Label2.place(relx=0.178, rely=0.057, height=52, width=141)
+        self.Label2.configure(activebackground="#f9f9f9")
+        self.Label2.configure(activeforeground="black")
+        self.Label2.configure(background="#21b5ff")
+        self.Label2.configure(font="-family {Al Bayan} -size 20 -weight bold")
+        self.Label2.configure(foreground="white")
+        self.Label2.configure(highlightbackground="#d9d9d9")
+        self.Label2.configure(highlightcolor="black")
+        self.Label2.configure(text='''SDP System''')
+
+        self.Button2 = tk.Button(self.Frame1)
+        self.Button2.place(relx=0.0, rely=0.419, height=62, width=227)
+        self.Button2.configure(activebackground="#ececec")
+        self.Button2.configure(activeforeground="#000000")
+        self.Button2.configure(background="#d9d9d9")
+        self.Button2.configure(font="-family {Al Bayan} -size 16")
+        self.Button2.configure(foreground="blue")
+        self.Button2.configure(highlightbackground="#d9d9d9")
+        self.Button2.configure(highlightcolor="black")
+        self.Button2.configure(justify='left')
+        self.Button2.configure(relief="raised")
+        self.Button2.configure(text='''Preprocessing''')
+
+        self.Button3 = tk.Button(self.Frame1)
+        self.Button3.place(relx=0.0, rely=0.305, height=62, width=227)
+        self.Button3.configure(activebackground="#ececec")
+        self.Button3.configure(activeforeground="#000000")
+        self.Button3.configure(background="#d9d9d9")
+        self.Button3.configure(font="-family {Al Bayan} -size 16")
+        self.Button3.configure(foreground="blue")
+        self.Button3.configure(highlightbackground="#d9d9d9")
+        self.Button3.configure(highlightcolor="black")
+        self.Button3.configure(justify='left')
+        self.Button3.configure(relief="raised")
+        self.Button3.configure(text='''Dataset Selection''')
+
+        self.Button4 = tk.Button(self.Frame1)
+        self.Button4.place(relx=0.0, rely=0.533, height=62, width=227)
+        self.Button4.configure(activebackground="#ececec")
+        self.Button4.configure(activeforeground="#000000")
+        self.Button4.configure(background="#d9d9d9")
+        self.Button4.configure(font="-family {Al Bayan} -size 16")
+        self.Button4.configure(foreground="blue")
+        self.Button4.configure(highlightbackground="#d9d9d9")
+        self.Button4.configure(highlightcolor="black")
+        self.Button4.configure(justify='left')
+        self.Button4.configure(relief="raised")
+        self.Button4.configure(text='''Discretization''')
+
+        self.Button5 = tk.Button(self.Frame1)
+        self.Button5.place(relx=0.0, rely=0.648, height=62, width=227)
+        self.Button5.configure(activebackground="#ececec")
+        self.Button5.configure(activeforeground="#000000")
+        self.Button5.configure(background="#d9d9d9")
+        self.Button5.configure(font="-family {Al Bayan} -size 16")
+        self.Button5.configure(foreground="blue")
+        self.Button5.configure(highlightbackground="#d9d9d9")
+        self.Button5.configure(highlightcolor="black")
+        self.Button5.configure(justify='left')
+        self.Button5.configure(relief="raised")
+        self.Button5.configure(text='''Model Selection''')
+
+        self.Button1 = tk.Button(self.Frame1)
+        self.Button1.place(relx=0.0, rely=0.19, height=62, width=227)
+        self.Button1.configure(activebackground="#ececec")#21b5ff
+        self.Button1.configure(activeforeground="#000000")
+        self.Button1.configure(background="#d9d9d9")
+
+        self.Button1.configure(font="-family {Al Bayan} -size 16")
+        self.Button1.configure(foreground="blue")
+
+        self.Button1.configure(highlightbackground="#d9d9d9")
+        self.Button1.configure(highlightcolor="black")
+        self.Button1.configure(justify='left')
+        self.Button1.configure(overrelief="flat")
+        self.Button1.configure(relief="raised")
+        self.Button1.configure(text='''Project Info''')
+
+        self.Button6 = tk.Button(self.Frame1)
+        self.Button6.place(relx=0.0, rely=0.762, height=62, width=227)
+        self.Button6.configure(activebackground="#ececec")
+        self.Button6.configure(activeforeground="#000000")
+        self.Button6.configure(background="#d9d9d9")
+        self.Button6.configure(font="-family {Al Bayan} -size 16")
+        self.Button6.configure(foreground="green")
+        self.Button6.configure(highlightbackground="#d9d9d9")
+        self.Button6.configure(highlightcolor="black")
+        self.Button6.configure(justify='left')
+        self.Button6.configure(relief="raised")
+        self.Button6.configure(text='''*** Feature Selection ***''')
+
+        self.Button7 = tk.Button(self.Frame1)
+        self.Button7.place(relx=0.0, rely=0.876, height=62, width=227)
+        self.Button7.configure(activebackground="#ececec")
+        self.Button7.configure(activeforeground="#000000")
+        self.Button7.configure(background="#d9d9d9")
+        self.Button7.configure(font="-family {Al Bayan} -size 16")
+        self.Button7.configure(foreground="blue")
+        self.Button7.configure(highlightbackground="#d9d9d9")
+        self.Button7.configure(highlightcolor="black")
+        self.Button7.configure(justify='left')
+        self.Button7.configure(relief="raised")
+        self.Button7.configure(text='''Outcome''')
+    # -----------------------------siedebar end-----------------------------#
+        self.Frame2 = tk.Frame(top)
+        self.Frame2.place(relx=0.258, rely=-0.01, relheight=1.016
+                , relwidth=0.743)
+        self.Frame2.configure(relief='groove')
+        self.Frame2.configure(borderwidth="2")
+        self.Frame2.configure(relief="groove")
+        self.Frame2.configure(background="#a6ddf4")
+        self.Frame2.configure(highlightbackground="#d9d9d9")
+        self.Frame2.configure(highlightcolor="black")
+
+        self.Label1 = tk.Label(self.Frame2)
+        self.Label1.place(relx=0.13, rely=0.07, height=46, width=475)
+        self.Label1.configure(activebackground="#a6ddf4")
+        self.Label1.configure(activeforeground="#1c38ed")
+        self.Label1.configure(background="#a6ddf4")
+        self.Label1.configure(font="-family {Al Bayan} -size 20 -weight bold")
+        self.Label1.configure(foreground="#171fff")
+        self.Label1.configure(highlightbackground="#ffffffffffff")
+        self.Label1.configure(highlightcolor="#2b1582")
+        self.Label1.configure(text='''Welcome to Software Defect Prediction System''')
+        
+        self.Label3 = tk.Label(self.Frame2)
+        self.Label3.place(relx=0.031, rely=0.214, height=31, width=386)
+        self.Label3.configure(activebackground="#f9f9f9")
+        self.Label3.configure(activeforeground="black")
+        self.Label3.configure(background="#a6ddf4")
+        self.Label3.configure(font="-family {Al Bayan} -size 16")
+        self.Label3.configure(foreground="#000000")
+        self.Label3.configure(highlightbackground="#d9d9d9")
+        self.Label3.configure(highlightcolor="black")
+        self.Label3.configure(justify='left')
+        self.Label3.configure(text='''Please add custom value for selected features:''')
+
+        self.Button9 = tk.Button(self.Frame2)
+        self.Button9.place(relx=0.822, rely=0.214, height=31, width=87)
+        self.Button9.configure(activebackground="#ececec")
+        self.Button9.configure(activeforeground="#000000")
+        self.Button9.configure(background="#d9d9d9")
+        self.Button9.configure(font="-family {Al Bayan} -size 16")
+        self.Button9.configure(foreground="blue")
+        self.Button9.configure(highlightbackground="#d9d9d9")
+        self.Button9.configure(highlightcolor="black")
+        self.Button9.configure(relief="raised")
+        self.Button9.configure(text='''Next Step''')
+        self.Button9.configure(command=outcome)
+
+        self.Message1 = tk.Message(self.Frame2)
+        self.Message1.place(relx=0, rely=0.311, relheight=0.105, relwidth=0.5)
+        self.Message1.configure(background="#a6ddf4")
+        self.Message1.configure(font="-family {Al Bayan} -size 16")
+        self.Message1.configure(foreground="#000000")
+        self.Message1.configure(highlightbackground="#d9d9d9")
+        self.Message1.configure(highlightcolor="black")
+        self.Message1.configure(anchor='sw')
+        f1 = "1."+ pre_dataset.columns[feature_extraction[0][0]]
+        self.Message1.configure(text=f1)
+        self.Message1.configure(width=500)
+
+        self.Entry1 = tk.Entry(self.Frame2)
+        self.Entry1.place(relx=0.443, rely=0.35,height=27, relwidth=0.095)
+        self.Entry1.configure(background="white")
+        self.Entry1.configure(font="TkFixedFont")
+        self.Entry1.configure(foreground="#000000")
+        self.Entry1.configure(insertbackground="black")
+
+        # self.Label4 = tk.Label(self.Frame2, justify='left')
+        # self.Label4.place(relx=0.005, rely=0.311, height=31, width=350)
+        # self.Label4.configure(background="blue")
+        # self.Label4.configure(font="-family {Al Bayan} -size 16")
+        # self.Label4.configure(foreground="#000000")
+        # # self.Label4.configure(justify=left)
+        # f1 = "1. "+ pre_dataset.columns[feature_extraction[0][0]]
+        # self.Label4.configure(text=f1)
+
+        self.Message2 = tk.Message(self.Frame2)
+        self.Message2.place(relx=0, rely=0.447, relheight=0.105, relwidth=0.5)
+        self.Message2.configure(background="#a6ddf4")
+        self.Message2.configure(font="-family {Al Bayan} -size 16")
+        self.Message2.configure(foreground="#000000")
+        self.Message2.configure(highlightbackground="#d9d9d9")
+        self.Message2.configure(highlightcolor="black")
+        self.Message2.configure(anchor='sw')
+        f2 = "2. "+ pre_dataset.columns[feature_extraction[0][1]]
+        self.Message2.configure(text=f2)
+        self.Message2.configure(width=500)
+
+        self.Entry2 = tk.Entry(self.Frame2)
+        self.Entry2.place(relx=0.443, rely=0.488,height=27, relwidth=0.095)
+        self.Entry2.configure(background="white")
+        self.Entry2.configure(font="TkFixedFont")
+        self.Entry2.configure(foreground="#000000")
+        self.Entry2.configure(insertbackground="black")
+        
+
+        # self.Label5 = tk.Label(self.Frame2)
+        # self.Label5.place(relx=0.005, rely=0.447, height=31, width=350)
+        # self.Label5.configure(background="#a6ddf4")
+        # self.Label5.configure(font="-family {Al Bayan} -size 16")
+        # self.Label5.configure(foreground="#000000")
+        # self.Label5.configure(justify='left')
+        # f2 = "2. "+ pre_dataset.columns[feature_extraction[0][1]]
+        # self.Label5.configure(text=f2)
+
+        self.Message3 = tk.Message(self.Frame2)
+        self.Message3.place(relx=0, rely=0.583, relheight=0.105, relwidth=0.5)
+        self.Message3.configure(background="#a6ddf4")
+        self.Message3.configure(font="-family {Al Bayan} -size 16")
+        self.Message3.configure(foreground="#000000")
+        self.Message3.configure(highlightbackground="#d9d9d9")
+        self.Message3.configure(highlightcolor="black")
+        self.Message3.configure(anchor='sw')
+        f3 = "3. "+ pre_dataset.columns[feature_extraction[0][2]]
+        self.Message3.configure(text=f3)
+        self.Message3.configure(width=500)
+
+        self.Entry3 = tk.Entry(self.Frame2)
+        self.Entry3.place(relx=0.443, rely=0.624,height=27, relwidth=0.095)
+        self.Entry3.configure(background="white")
+        self.Entry3.configure(font="TkFixedFont")
+        self.Entry3.configure(foreground="#000000")
+        self.Entry3.configure(insertbackground="black")
+
+        # self.Label6 = tk.Label(self.Frame2)
+        # self.Label6.place(relx=0.005, rely=0.583, height=31, width=350)
+        # self.Label6.configure(background="#a6ddf4")
+        # self.Label6.configure(font="-family {Al Bayan} -size 16")
+        # self.Label6.configure(foreground="#000000")
+        # self.Label6.configure(justify='left')
+        # f3 = "3. "+ pre_dataset.columns[feature_extraction[0][2]]
+        # self.Label6.configure(text=f3)
+
+        self.Message4 = tk.Message(self.Frame2)
+        self.Message4.place(relx=0, rely=0.718, relheight=0.105, relwidth=0.5)
+        self.Message4.configure(background="#a6ddf4")
+        self.Message4.configure(font="-family {Al Bayan} -size 16")
+        self.Message4.configure(foreground="#000000")
+        self.Message4.configure(highlightbackground="#d9d9d9")
+        self.Message4.configure(highlightcolor="black")
+        self.Message4.configure(anchor='sw')
+        f4 = "4. "+ pre_dataset.columns[feature_extraction[0][3]]
+        self.Message4.configure(text=f4)
+        self.Message4.configure(width=500)
+
+        # self.Label7 = tk.Label(self.Frame2)
+        # self.Label7.place(relx=0.005, rely=0.718, height=31, width=350)
+        # self.Label7.configure(background="#a6ddf4")
+        # self.Label7.configure(font="-family {Al Bayan} -size 16")
+        # self.Label7.configure(foreground="#000000")
+        # self.Label7.configure(justify='left')
+        # f4 = "4. "+ pre_dataset.columns[feature_extraction[0][3]]
+        # self.Label7.configure(text=f4)
+
+        self.Message5 = tk.Message(self.Frame2)
+        self.Message5.place(relx=0, rely=0.854, relheight=0.105, relwidth=0.5)
+        self.Message5.configure(background="#a6ddf4")
+        self.Message5.configure(font="-family {Al Bayan} -size 16")
+        self.Message5.configure(foreground="#000000")
+        self.Message5.configure(highlightbackground="#d9d9d9")
+        self.Message5.configure(highlightcolor="black")
+        self.Message5.configure(anchor='sw')
+        f5 = "5. "+ pre_dataset.columns[feature_extraction[0][4]]
+        self.Message5.configure(text=f5)
+        self.Message5.configure(width=500)
+
+        # self.Label8 = tk.Label(self.Frame2)
+        # self.Label8.place(relx=0.005, rely=0.854, height=31, width=350)
+        # self.Label8.configure(background="#a6ddf4")
+        # self.Label8.configure(font="-family {Al Bayan} -size 16")
+        # self.Label8.configure(foreground="#000000")
+        # self.Label8.configure(justify='left')
+        # f5 = "5. "+ pre_dataset.columns[feature_extraction[0][4]]
+        # self.Label8.configure(text=f5)
+
+        self.Message6 = tk.Message(self.Frame2)
+        self.Message6.place(relx=0.5, rely=0.311, relheight=0.105, relwidth=0.5)
+        self.Message6.configure(background="#a6ddf4")
+        self.Message6.configure(font="-family {Al Bayan} -size 16")
+        self.Message6.configure(foreground="#000000")
+        self.Message6.configure(highlightbackground="#d9d9d9")
+        self.Message6.configure(highlightcolor="black")
+        self.Message6.configure(anchor='sw')
+        f6 = "6. "+ pre_dataset.columns[feature_extraction[0][5]]
+        self.Message6.configure(text=f6)
+        self.Message6.configure(width=500)
+
+        # self.Label9 = tk.Label(self.Frame2)
+        # self.Label9.place(relx=0.558, rely=0.311, height=31, width=350)
+        # self.Label9.configure(background="#a6ddf4")
+        # self.Label9.configure(font="-family {Al Bayan} -size 16")
+        # self.Label9.configure(foreground="#000000")
+        # self.Label9.configure(justify='left')
+        # f6 = "6. "+ pre_dataset.columns[feature_extraction[0][5]]
+        # self.Label9.configure(text=f6)
+
+        self.Message7 = tk.Message(self.Frame2)
+        self.Message7.place(relx=0.5, rely=0.447, relheight=0.105, relwidth=0.5)
+        self.Message7.configure(background="#a6ddf4")
+        self.Message7.configure(font="-family {Al Bayan} -size 16")
+        self.Message7.configure(foreground="#000000")
+        self.Message7.configure(highlightbackground="#d9d9d9")
+        self.Message7.configure(highlightcolor="black")
+        self.Message7.configure(anchor='sw')
+        f7 = "7. "+ pre_dataset.columns[feature_extraction[0][6]]
+        self.Message7.configure(text=f7)
+        self.Message7.configure(width=500)
+
+        # self.Label10 = tk.Label(self.Frame2)
+        # self.Label10.place(relx=0.558, rely=0.447, height=31, width=350)
+        # self.Label10.configure(background="#a6ddf4")
+        # self.Label10.configure(font="-family {Al Bayan} -size 16")
+        # self.Label10.configure(foreground="#000000")
+        # self.Label10.configure(justify='left')
+        # f7 = "7. "+ pre_dataset.columns[feature_extraction[0][6]]
+        # self.Label10.configure(text=f7)
+
+        self.Message8 = tk.Message(self.Frame2)
+        self.Message8.place(relx=0.5, rely=0.583, relheight=0.105, relwidth=0.5)
+        self.Message8.configure(background="#a6ddf4")
+        self.Message8.configure(font="-family {Al Bayan} -size 16")
+        self.Message8.configure(foreground="#000000")
+        self.Message8.configure(highlightbackground="#d9d9d9")
+        self.Message8.configure(highlightcolor="black")
+        self.Message8.configure(anchor='sw')
+        f8 = "8. "+ pre_dataset.columns[feature_extraction[0][7]]
+        self.Message8.configure(text=f8)
+        self.Message8.configure(width=500)
+
+        # self.Label11 = tk.Label(self.Frame2)
+        # self.Label11.place(relx=0.558, rely=0.583, height=31, width=350)
+        # self.Label11.configure(background="#a6ddf4")
+        # self.Label11.configure(font="-family {Al Bayan} -size 16")
+        # self.Label11.configure(foreground="#000000")
+        # self.Label11.configure(justify='left')
+        # f8 = "8. "+ pre_dataset.columns[feature_extraction[0][7]]
+        # self.Label11.configure(text=f8)
+
+        self.Message9 = tk.Message(self.Frame2)
+        self.Message9.place(relx=0.5, rely=0.718, relheight=0.105, relwidth=0.5)
+        self.Message9.configure(background="#a6ddf4")
+        self.Message9.configure(font="-family {Al Bayan} -size 16")
+        self.Message9.configure(foreground="#000000")
+        self.Message9.configure(highlightbackground="#d9d9d9")
+        self.Message9.configure(highlightcolor="black")
+        self.Message9.configure(anchor='sw')
+        f9 = "9. "+ pre_dataset.columns[feature_extraction[0][8]]
+        self.Message9.configure(text=f9)
+        self.Message9.configure(width=500)
+
+
+        # self.Label12 = tk.Label(self.Frame2)
+        # self.Label12.place(relx=0.558, rely=0.718, height=31, width=350)
+        # self.Label12.configure(background="#a6ddf4")
+        # self.Label12.configure(cursor="fleur")
+        # self.Label12.configure(font="-family {Al Bayan} -size 16")
+        # self.Label12.configure(foreground="#000000")
+        # self.Label12.configure(justify='left')
+        # f9 = "9. "+ pre_dataset.columns[feature_extraction[0][8]]
+        # self.Label12.configure(text=f9)
+
+        self.Message10 = tk.Message(self.Frame2)
+        self.Message10.place(relx=0.5, rely=0.854, relheight=0.105, relwidth=0.5)
+        self.Message10.configure(background="#a6ddf4")
+        self.Message10.configure(font="-family {Al Bayan} -size 16")
+        self.Message10.configure(foreground="#000000")
+        self.Message10.configure(highlightbackground="#d9d9d9")
+        self.Message10.configure(highlightcolor="black")
+        self.Message10.configure(anchor='sw')
+        f10 = "10. "+ pre_dataset.columns[feature_extraction[0][9]]
+        self.Message10.configure(text=f10)
+        self.Message10.configure(width=500)
+
+        # self.Label13 = tk.Label(self.Frame2)
+        # self.Label13.place(relx=0.543, rely=0.854, height=31, width=350)
+        # self.Label13.configure(background="#a6ddf4")
+        # self.Label13.configure(font="-family {Al Bayan} -size 16")
+        # self.Label13.configure(foreground="#000000")
+        # self.Label13.configure(justify='left')
+        # f10 = "10. "+ pre_dataset.columns[feature_extraction[0][9]]
+        # self.Label13.configure(text=f10)
     
     def fun(self, top=None):
         global selected_data
@@ -1642,20 +2057,13 @@ class showFeature:
 
         selected_data = discretize_data[:, feature_extraction[0]]
 
-        # if datactrl == 1:
-        #     selected_data = discretize_data[:, [36, 29, 16,  3, 32,  9, 19,  4, 20, 22]]  #=> transform manual to auto
-        # if datactrl == 2:
-        #     selected_data = discretize_data[:, [3, 28, 14, 13,  8,  4, 21, 25, 16, 15]]  #=> transform manual to auto
-        # if datactrl == 3:
-        #     selected_data = discretize_data[:, [0, 16, 9,  8, 17, 35,  2, 22, 20, 19]]  #=> transform manual to auto
-        # if datactrl == 4:
-        #     selected_data = discretize_data[:, [35, 25,  3, 16, 17,  9,  7, 32, 10, 29]]  #=> transform manual to auto
-        # if datactrl == 5:
-        #     selected_data = discretize_data[:, [34, 18,  1,  3,  2,  7, 19, 15, 26, 12]]  #=> transform manual to auto
-
     def __init__(self, top=None):
         self.fun()
-        self.ui()
+        if cusmodel == 1:
+            # if modelctrl == 2 or modelctrl == 4:
+            self.cusui()
+        else:
+            self.ui()
 
 class outcome:
     def ui(self, top=None):
@@ -1807,20 +2215,22 @@ class outcome:
         self.Label3.configure(highlightcolor="black")
         self.Label3.configure(justify='left')
         if datactrl == 1:
-            tmp = "PC1 Dataset"
+            tmp = "MW1 Dataset"
         if datactrl == 2:
-            tmp = "PC2 Dataset"
-        if datactrl == 3:
             tmp = "PC3 Dataset"
-        if datactrl == 4:
+        if datactrl == 3:
             tmp = "PC4 Dataset"
-        if datactrl == 5:
-            tmp = "PC5 Dataset"
-        if modelctrl == 0:
+
+        if modelctrl == 1:
             modeltmp = tmp + " using SVM"
             self.Label3.place(relx=0.15, rely=0.214, height=31, width=416)
-
-        else:
+        elif modelctrl == 2:
+            modeltmp = tmp + " using SVM with MRMR"
+            self.Label3.place(relx=0.18, rely=0.214, height=31, width=416)
+        elif modelctrl == 3:
+            modeltmp = tmp + " using AdaBoost SVM-RBF"
+            self.Label3.place(relx=0.18, rely=0.214, height=31, width=416)
+        elif modelctrl == 4:
             modeltmp = tmp + " using AdaBoost SVM-RBF with MRMR"
             self.Label3.place(relx=0.18, rely=0.214, height=31, width=416)
 
@@ -1840,7 +2250,7 @@ class outcome:
         self.Label9.configure(font="-family {Al Bayan} -size 16")
         self.Label9.configure(foreground="#000000")
         self.Label9.configure(justify='left')
-        self.Label9.configure(text=float("{0:.2f}".format(accuracy)))
+        self.Label9.configure(text=float("{0:.3f}".format(accuracy)))
 
         self.Label5 = tk.Label(self.Frame2)
         self.Label5.place(relx=0.016, rely=0.408, height=31, width=96)
@@ -1857,7 +2267,7 @@ class outcome:
         self.Label10.configure(font="-family {Al Bayan} -size 16")
         self.Label10.configure(foreground="#000000")
         self.Label10.configure(justify='left')
-        self.Label10.configure(text=float("{0:.2f}".format(precision)))
+        self.Label10.configure(text=float("{0:.3f}".format(precision)))
 
         self.Label6 = tk.Label(self.Frame2)
         self.Label6.place(relx=0.026, rely=0.505, height=31, width=61)
@@ -1872,7 +2282,7 @@ class outcome:
         self.Label11.configure(font="-family {Al Bayan} -size 16")
         self.Label11.configure(foreground="#000000")
         self.Label11.configure(justify='left')
-        self.Label11.configure(text=float("{0:.2f}".format(recall)))
+        self.Label11.configure(text=float("{0:.3f}".format(recall)))
 
         self.Label7 = tk.Label(self.Frame2)
         self.Label7.place(relx=0.028, rely=0.602, height=31, width=73)
@@ -1887,7 +2297,7 @@ class outcome:
         self.Label12.configure(font="-family {Al Bayan} -size 16")
         self.Label12.configure(foreground="#000000")
         self.Label12.configure(justify='left')
-        self.Label12.configure(text=float("{0:.2f}".format(fscore)))
+        self.Label12.configure(text=float("{0:.3f}".format(fscore)))
 
         self.Label8 = tk.Label(self.Frame2)
         self.Label8.place(relx=0.028, rely=0.699, height=31, width=147)
@@ -1929,7 +2339,7 @@ class outcome:
         self.Label16.configure(text='''Incorrectly Classified Instances :''')
 
         self.Label17 = tk.Label(self.Frame2)
-        self.Label17.place(relx=0.4, rely=0.913, height=31, width=100)
+        self.Label17.place(relx=0.41, rely=0.913, height=31, width=100)
         self.Label17.configure(background="#a6ddf4")
         self.Label17.configure(font="-family {Al Bayan} -size 16")
         self.Label17.configure(foreground="#000000")
@@ -1991,21 +2401,21 @@ class outcome:
         # # canvas.draw()
         # plt.show()
 
-        if modelctrl == 0:
+        if modelctrl == 1:
             txt1 = "SVM"
-        else:
+        elif modelctrl == 2:
+            txt1 = "SVM + MRMR"
+        elif modelctrl == 3:
             txt1 = "Hybrid Approach"
+        elif modelctrl == 4:
+            txt1 = "Hybrid Approach + MRMR"
         
         if datactrl == 1:
-            txt2 = "PC1"
+            txt2 = "MW1"
         if datactrl == 2:
-            txt2 = "PC2"
-        if datactrl == 3:
             txt2 = "PC3"
-        if datactrl == 4:
+        if datactrl == 3:
             txt2 = "PC4"
-        if datactrl == 5:
-            txt2 = "PC5"
         
         txt = txt1 +" for "+ txt2
 
@@ -2186,15 +2596,11 @@ class outcome:
         self.Label3.configure(highlightcolor="black")
         self.Label3.configure(justify='left')
         if datactrl == 1:
-            tmp = "PC1"
+            tmp = "MW1"
         if datactrl == 2:
-            tmp = "PC2"
-        if datactrl == 3:
             tmp = "PC3"
-        if datactrl == 4:
+        if datactrl == 3:
             tmp = "PC4"
-        if datactrl == 5:
-            tmp = "PC5"
         modeltmp = "Methods Comparison Chart for " + tmp + " Dataset"
         self.Label3.configure(text=modeltmp)
         self.Frame3 = tk.Frame(self.Frame2)
@@ -2204,15 +2610,17 @@ class outcome:
         self.Frame3.configure(relief="groove")
         self.Frame3.configure(background="#d9d9d9")
 
-        txt = "SVM vs Hybrid for "+ tmp
+        txt = "For "+ tmp + " Dataset"
 
         Data1 = {'Objects': ['Accuracy', 'Precision', 'Recall', 'F-score'],
         'SVM': [accuracy_s, precision_s, recall_s, fscore_s],
-        'Hybrid': [accuracy_a, precision_a, recall_a, fscore_a]
+        'SVM + MRMR': [accuracy_sf, precision_sf, recall_sf, fscore_sf],
+        'Hybrid': [accuracy_a, precision_a, recall_a, fscore_a],
+        'Hybrid + MRMR': [accuracy_af, precision_af, recall_af, fscore_af]
        }
 
-        df1 = DataFrame(Data1, columns= ['Objects', 'SVM', 'Hybrid'])
-        df1 = df1[['Objects', 'SVM', 'Hybrid']].groupby('Objects').sum()
+        df1 = DataFrame(Data1, columns= ['Objects', 'SVM', 'Hybrid', 'SVM + MRMR', 'Hybrid + MRMR'])
+        df1 = df1[['Objects', 'SVM', 'Hybrid', 'SVM + MRMR', 'Hybrid + MRMR']].groupby('Objects').sum()
 
         figure1 = plt.Figure(figsize=(6,1), dpi=70)
         # figure1 = plt.set_xlim(0.89, 1)
@@ -2288,10 +2696,20 @@ class outcome:
         global recall_s
         global fscore_s
 
+        global accuracy_sf
+        global precision_sf
+        global recall_sf
+        global fscore_sf
+
         global accuracy_a
         global precision_a
         global recall_a
         global fscore_a
+
+        global accuracy_af
+        global precision_af
+        global recall_af
+        global fscore_af
 
 
         # global concat_data_s
@@ -2299,61 +2717,74 @@ class outcome:
 
 
         # print('selected data in outcome-->', selected_data)
-        if modelctrl == 2:
+        # Have to write for 6 as well, this one is to compare without MRMR method, have to remove MRMR from Hybrid method
+        if modelctrl == 5:
             num_fea = 10
             feature_extraction_c = feature_extract(discretize_data, target_data, num_fea)
             selected_data_a = discretize_data[:, feature_extraction_c[0]]
+
             concat_data_s = concat(discretize_data, target_data)
-            concat_data_a = concat(selected_data_a, target_data)
+            concat_data_a = concat(discretize_data, target_data)
+            concat_data_sf = concat(selected_data_a, target_data)
+            concat_data_af = concat(selected_data_a, target_data)
 
             train_data_s, test_data_s = train_test_split(concat_data_s, test_size=0.3, shuffle=False) # random_state=42 # shuffle true --> 0.8951612903225806 # shuffle false --> 0.9274193548387096
+            train_data_sf, test_data_sf = train_test_split(concat_data_sf, test_size=0.3, shuffle=False) # random_state=42 # shuffle true --> 0.8951612903225806 # shuffle false --> 0.9274193548387096
             train_data_a, test_data_a = train_test_split(concat_data_a, test_size=0.3, shuffle=False) # random_state=42 # shuffle true --> 0.8951612903225806 # shuffle false --> 0.9274193548387096
+            train_data_af, test_data_af = train_test_split(concat_data_af, test_size=0.3, shuffle=False) # random_state=42 # shuffle true --> 0.8951612903225806 # shuffle false --> 0.9274193548387096
 
-            if datactrl == 2:
-                X_train_s = train_data_s[:,0:36]
-                Y_train_s = train_data_s[:,36].astype('int')
-                X_test_s = test_data_s[:,0:36]
-                Y_test_s = test_data_s[:,36].astype('int')
 
-            elif datactrl == 5:
-                X_train_s = train_data_s[:,0:38]
-                Y_train_s = train_data_s[:,38].astype('int')
-                X_test_s = test_data_s[:,0:38]
-                Y_test_s = test_data_s[:,38].astype('int')
+            X_train_s = train_data_s[:,0:37]
+            Y_train_s = train_data_s[:,37].astype('int')
+            X_test_s = test_data_s[:,0:37]
+            Y_test_s = test_data_s[:,37].astype('int')
 
-            else:
-                X_train_s = train_data_s[:,0:37]
-                Y_train_s = train_data_s[:,37].astype('int')
-                X_test_s = test_data_s[:,0:37]
-                Y_test_s = test_data_s[:,37].astype('int')
+            X_train_a = train_data_s[:,0:37]
+            Y_train_a = train_data_s[:,37].astype('int')
+            X_test_a = test_data_s[:,0:37]
+            Y_test_a = test_data_s[:,37].astype('int')
 
-            X_train_a = train_data_a[:,0:10]
-            Y_train_a = train_data_a[:,10].astype('int')
-            X_test_a = test_data_a[:,0:10]
-            Y_test_a = test_data_a[:,10].astype('int')
+            X_train_sf = train_data_a[:,0:10]
+            Y_train_sf = train_data_a[:,10].astype('int')
+            X_test_sf = test_data_a[:,0:10]
+            Y_test_sf = test_data_a[:,10].astype('int')
 
+            X_train_af = train_data_af[:,0:10]
+            Y_train_af = train_data_af[:,10].astype('int')
+            X_test_af = test_data_af[:,0:10]
+            Y_test_af = test_data_af[:,10].astype('int')
+
+           
             clf_tree_c = SVC(kernel='rbf', random_state=0, gamma=.01, C=10000)
 
             pred_train_s, pred_test_s = generic_clf(Y_train_s, X_train_s, Y_test_s, X_test_s, clf_tree_c)
+            pred_train_sf, pred_test_sf = generic_clf(Y_train_sf, X_train_sf, Y_test_sf, X_test_sf, clf_tree_c)
+
             # pred_train, pred_test = [pred[0]], [pred[1]]
             prf_s = precision_recall_fscore_support(Y_test_s, pred_test_s, average=None)
+            prf_sf = precision_recall_fscore_support(Y_test_sf, pred_test_sf, average=None)
+
 
             precision_s = prf_s[0][0]
             recall_s = prf_s[1][0]
             fscore_s = prf_s[2][0]
             accuracy_s = accuracy_score(Y_test_s, pred_test_s)
 
+            precision_sf = prf_sf[0][0]
+            recall_sf = prf_sf[1][0]
+            fscore_sf = prf_sf[2][0]
+            accuracy_sf = accuracy_score(Y_test_sf, pred_test_sf)
+
             # Ada
             if (datactrl == 1):
-                x_range_a = range(0, 9, 1)
-            if (datactrl == 2):
-                x_range_a = range(0, 16, 1)
-            if (datactrl == 3):
-                x_range_a = range(0, 6, 1)
-            if (datactrl == 4):
                 x_range_a = range(0, 2, 1)
-            if (datactrl == 5):
-                x_range_a = range(0, 8, 1)
+                x_range_af = range(0, 13, 1)
+            if (datactrl == 2):
+                x_range_a = range(0, 13, 1)
+                x_range_af = range(0, 2, 1)
+            if (datactrl == 3):
+                x_range_a = range(0, 2, 1)
+                x_range_af = range(0, 6, 1)
 
             for M in x_range_a:  
                 n_train_a, n_test_a = len(X_train_a), len(X_test_a)
@@ -2397,10 +2828,62 @@ class outcome:
                     pred_test_a = [sum(x) for x in zip(pred_test_a, 
                                                     [x * alpha_m_a for x in pred_test_a_i])]
                 pred_train_a, pred_test_a = np.sign(pred_train_a), np.sign(pred_test_a)
+            
+            for M_af in x_range_af:  
+                n_train_af, n_test_af = len(X_train_af), len(X_test_af)
+                # Initialize weights
+                w_af = np.ones(n_train_af) / n_train_af
+                # print('w first one', w)
+                pred_train_af, pred_test_af = [np.zeros(n_train_af), np.zeros(n_test_af)]
+
+                for i in range(M_af):
+                    # global acc_ada 
+                    # global prf_ada
+                    # global cm_ada
+                    clf_tree_c.fit(X_train_af, Y_train_af, sample_weight = w_af)
+                    pred_train_i_af = clf_tree_c.predict(X_train_af)
+                    pred_test_i_af = clf_tree_c.predict(X_test_af)
+
+                    prf_ada_af = precision_recall_fscore_support(Y_test_af, pred_test_i_af, average=None)
+                    print(str(i) + 'precision_recall_fscore_support avg none: {}', prf_ada_af)
+
+                    precision_af = prf_ada_af[0][0]
+                    recall_af = prf_ada_af[1][0]
+                    fscore_af = prf_ada_af[2][0]
+                    accuracy_af = accuracy_score(Y_test_af, pred_test_i_af)
+                    print('Accuracy for'+ str(i) +'-->', accuracy_af)
+                    
+                    # Indicator function
+                    miss_af = [int(x) for x in (pred_train_i_af != Y_train_af)]
+                    # Equivalent with 1/-1 to update weights
+                    miss2_af = [x if x==1 else -1 for x in miss_af]
+                    # Error
+                    err_m_af = np.dot(w_af,miss_af) / sum(w_af)
+
+                    # Alpha
+                    alpha_m_af = 0.5 * np.log( (1 - err_m_af) / float(err_m_af))
+
+                    # New weights
+                    w_af = np.multiply(w_af, np.exp([float(x) * alpha_m_af for x in miss2_af]))
+
+                    # Add to prediction
+                    pred_train_af = [sum(x) for x in zip(pred_train_af, 
+                                                    [x * alpha_m_af for x in pred_train_i_af])]
+                    pred_test_af = [sum(x) for x in zip(pred_test_af, 
+                                                    [x * alpha_m_af for x in pred_test_i_af])]
+                pred_train_af, pred_test_af = np.sign(pred_train_af), np.sign(pred_test_af)
+                        
+
+            
+            print('af-->',precision_af,',',recall_af,',',fscore_af,',',accuracy_af)
+            print('a-->',precision_a,',',recall_a,',',fscore_a,',',accuracy_a)
+
+
+        # common case for 1,2,3,4
         else:
-            if modelctrl == 0:
+            if modelctrl == 1 or modelctrl == 3:
                 concat_data = concat(discretize_data, target_data)
-            if modelctrl == 1:
+            if modelctrl == 2 or modelctrl == 4:
                 concat_data = concat(selected_data, target_data)
             print('\n')
             print('*** Concat Data ***')
@@ -2415,26 +2898,26 @@ class outcome:
             print(test_data.shape)
 
             ## for 0 case, SVM
-            if modelctrl == 0:
-                if datactrl == 2:
-                    X_train = train_data[:,0:36]
-                    Y_train = train_data[:,36].astype('int')
-                    X_test = test_data[:,0:36]
-                    Y_test = test_data[:,36].astype('int')
+            if modelctrl == 1 or modelctrl == 3:
+                # if datactrl == 2:
+                #     X_train = train_data[:,0:36]
+                #     Y_train = train_data[:,36].astype('int')
+                #     X_test = test_data[:,0:36]
+                #     Y_test = test_data[:,36].astype('int')
 
-                elif datactrl == 5:
-                    X_train = test_data[:,0:38]
-                    Y_train = test_data[:,38].astype('int')
-                    X_test = test_data[:,0:38]
-                    Y_test = test_data[:,38].astype('int')
+                # elif datactrl == 5:
+                #     X_train = test_data[:,0:38]
+                #     Y_train = test_data[:,38].astype('int')
+                #     X_test = test_data[:,0:38]
+                #     Y_test = test_data[:,38].astype('int')
 
-                else:
-                    X_train = train_data[:,0:37]
-                    Y_train = train_data[:,37].astype('int')
-                    X_test = test_data[:,0:37]
-                    Y_test = test_data[:,37].astype('int')
+                # else:
+                X_train = train_data[:,0:37]
+                Y_train = train_data[:,37].astype('int')
+                X_test = test_data[:,0:37]
+                Y_test = test_data[:,37].astype('int')
 
-            if modelctrl == 1:
+            if modelctrl == 2 or modelctrl == 4:
                 X_train = train_data[:,0:10]
                 Y_train = train_data[:,10].astype('int')
 
@@ -2443,7 +2926,7 @@ class outcome:
 
             clf_tree = SVC(kernel='rbf', random_state=0, gamma=.01, C=10000)
 
-            if modelctrl == 0:
+            if modelctrl == 1 or modelctrl == 2:
                 pred_train, pred_test = generic_clf(Y_train, X_train, Y_test, X_test, clf_tree)
                 # pred_train, pred_test = [pred[0]], [pred[1]]
                 prf = precision_recall_fscore_support(Y_test, pred_test, average=None)
@@ -2468,25 +2951,21 @@ class outcome:
                 correct = cm[0][0] + cm[1][1]
                 incorrect = cm[0][1] + cm[1][0]
 
-
-
-                # print('clf_tree', clf_tree)
-                # print('er_tree', er_tree)
-                # er_train, er_test = [er_tree[0]], [er_tree[1]]
-                # print('er_train', er_train)
-                # print('er_test', er_test)
-
-            if modelctrl == 1:
-                if (datactrl == 1):
-                    x_range = range(0, 9, 1)
-                if (datactrl == 2):
-                    x_range = range(0, 16, 1)
-                if (datactrl == 3):
-                    x_range = range(0, 6, 1)
-                if (datactrl == 4):
-                    x_range = range(0, 2, 1)
-                if (datactrl == 5):
-                    x_range = range(0, 8, 1)
+            if modelctrl == 3 or modelctrl == 4:
+                if modelctrl == 3:
+                    if (datactrl == 1):
+                        x_range = range(0, 2, 1)#0
+                    if (datactrl == 2):
+                        x_range = range(0, 13, 1)#11
+                    if (datactrl == 3):
+                        x_range = range(0, 2, 1)#0
+                else:
+                    if (datactrl == 1):
+                        x_range = range(0, 13, 1)#11
+                    if (datactrl == 2):
+                        x_range = range(0, 2, 1)
+                    if (datactrl == 3):
+                        x_range = range(0, 6, 1)#4
 
                 for M in x_range:  
                     n_train, n_test = len(X_train), len(X_test)
@@ -2515,8 +2994,13 @@ class outcome:
                         
                         cm = confusion_matrix(Y_test, pred_test_i)
                         print("\nConfusion Matrix", cm)
-                        correct = cm[0][0] + cm[1][1]
-                        incorrect = cm[0][1] + cm[1][0]
+                        if len(cm) == 1:
+                            correct = cm[0][0]
+                            incorrect = 0
+                        else:
+                            correct = cm[0][0] + cm[1][1]
+                            incorrect = cm[0][1] + cm[1][0]
+                       
 
                         # Indicator function
                         miss = [int(x) for x in (pred_train_i != Y_train)]
@@ -2537,69 +3021,20 @@ class outcome:
                         pred_test = [sum(x) for x in zip(pred_test, 
                                                         [x * alpha_m for x in pred_test_i])]
                     pred_train, pred_test = np.sign(pred_train), np.sign(pred_test)
-                            
-
-
-
-
-
-
-
-
-                    # a, b, c= adaboost_clf_pre(Y_train, X_train, Y_test, X_test, i, clf_tree)
-                    # # prf_ada, accuracy, cm = adaboost_clf(Y_train, X_train, Y_test, X_test, i, clf_tree)
-
-                    # # from main import *
-                    # print ('int.prf', a)
-                    # print ('int.acc', b)
-                    # print ('int.cm', c)
-
-                    # print ('main.prf', adaboost_clf.prf_ada)
-                    # print ('main.acc', adaboost_clf.accuracy)
-                    # print ('main.cm', adaboost_clf.cm)
-                    
-
-                    # precision = prf_ada[0][0]
-                    # recall = prf_ada[1][0]
-                    # fscore = prf_ada[2][0]
-                    # correct = prf_ada[3][0]
-                    # incorrect = prf_ada[3][1]
-                    # # accuracy = acc_ada
-                    # # cm = cm_ada
-                    # print ('precision', precision)
-                    # print ('recall', recall)
-                    # print ('fscore', fscore)
-                    # print ('acc', accuracy)
-                    # print ('cm', cm)
-
-
-                    # print('')
-                    # # print('er_i'+ str(i) +'-->', er_i)
-                    # print ('a', a)
-                    # print ('b', b)
-                    # from main import prf_ada, acc_ada, cm_ada
-
-
-                    # print ('main.prf[0]', prf_ada[0])
-                    # print ('main.prf[0][0]', prf_ada[0][0])
-
-                    
-
-
-                    # print ('c', c)
 
     def __init__(self, top=None):
-        if modelctrl == 2:
-            self.fun()
+        self.fun()
+
+        if modelctrl == 5 or modelctrl == 6:
             self.compare_ui()
         else:
-            self.fun()
             self.ui()
+        # if modelctrl == 2:
+        #     self.fun()
+        #     self.compare_ui()
+        # else:
+        #     self.fun()
+        #     self.ui()
         
 if __name__ == '__main__':
     vp_start_gui()
-
-
-
-
-

@@ -8,17 +8,26 @@ from sklearn.metrics import confusion_matrix
 """ Discretization SCRIPT ============================================================="""
 def main_preprocess(dataset_path, datactrl):
     # dataset_path = 'PC3.csv'
-    col_count = 40
+#     if datactrl == 1:
+#         col_count = 37
+#     if datactrl == 2:
+#         col_count = 40        
+#     if datactrl == 3:
+#         col_count = 37
+#     if datactrl == 4:
+#         col_count = 37
+#     if datactrl == 5:
+#          col_count = 38 
+    col_count = 37            
+
     dataset = pd.read_csv(dataset_path)
+    np.set_printoptions(formatter={'float_kind':'{:0f}'.format})
+
     print('Dataset')
     print(dataset)
-
-    if datactrl != 5:
+    if datactrl != 1:
         indexNames = dataset[ dataset['DECISION_DENSITY'] == '?' ].index 
         dataset.drop(indexNames , inplace=True)
-
-    if datactrl == 5:
-        col_count = 39
 
     j = 0
     print('\n')

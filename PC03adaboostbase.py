@@ -126,13 +126,15 @@ def plot_error_rate(er_train, er_test):
 def preprocess(dataset_path):
     # dataset_path = 'PC3.csv'
     dataset = pd.read_csv(dataset_path)
+    np.set_printoptions(formatter={'float_kind':'{:0f}'.format})
+
     print('Dataset')
     print(dataset)
 
     indexNames = dataset[ dataset['DECISION_DENSITY'] == '?' ].index 
     dataset.drop(indexNames , inplace=True)
 
-    col_count = 40
+    col_count = 37
     j = 0
     print('\n')
     print ("*** Remove Column Name ***")
@@ -182,8 +184,9 @@ def concat(selected_data, target_data):
 
 """ MAIN SCRIPT ============================================================="""
 if __name__ == '__main__':
+    dataset_path = 'MDP csv/PC3clean.csv'
 
-    dataset_path = 'MDP csv/PC03.csv'
+    # dataset_path = 'MDP csv/PC03.csv'
     feature_data, target_data = preprocess(dataset_path)
     print('feature_data')
     print(feature_data)
@@ -205,7 +208,7 @@ if __name__ == '__main__':
     print("*** Selected Feature ***")
     print(feature_extraction)
     
-    selected_data = discretize_data[:, [0, 16, 9,  8, 17, 35,  2, 22, 20, 19]]  #=> transform manual to auto
+    selected_data = discretize_data[:, feature_extraction[0]]  #=> transform manual to auto
     concat_data = concat(selected_data, target_data)
     print('\n')
     print('*** Concat Data ***')
@@ -259,7 +262,7 @@ if __name__ == '__main__':
     print('er_train', er_train)
     print('er_test', er_test)
 
-    x_range = range(0, 40, 5)
+    x_range = range(0, 40, 1)
     for i in x_range:    
         er_i = adaboost_clf(Y_train, X_train, Y_test, X_test, i, clf_tree)
         print('er_i'+ str(i) +'-->', er_i)

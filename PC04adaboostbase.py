@@ -132,7 +132,8 @@ def preprocess(dataset_path):
     indexNames = dataset[ dataset['DECISION_DENSITY'] == '?' ].index 
     dataset.drop(indexNames , inplace=True)
 
-    col_count = 40
+    # col_count = 40
+    col_count = 37
     j = 0
     print('\n')
     print ("*** Remove Column Name ***")
@@ -183,7 +184,8 @@ def concat(selected_data, target_data):
 """ MAIN SCRIPT ============================================================="""
 if __name__ == '__main__':
 
-    dataset_path = 'MDP csv/PC04.csv'
+    dataset_path = 'MDP csv/PC4clean.csv'
+    # dataset_path = 'MDP csv/PC04.csv'
     feature_data, target_data = preprocess(dataset_path)
     print('feature_data')
     print(feature_data)
@@ -205,7 +207,8 @@ if __name__ == '__main__':
     print("*** Selected Feature ***")
     print(feature_extraction)
     
-    selected_data = discretize_data[:, [35, 25,  3, 16, 17,  9,  7, 32, 10, 29]]  #=> transform manual to auto
+    selected_data = discretize_data[:, feature_extraction[0]]  #=> transform manual to auto
+    print('feature_extraction[0]', feature_extraction[0])
     concat_data = concat(selected_data, target_data)
     print('\n')
     print('*** Concat Data ***')
@@ -220,9 +223,12 @@ if __name__ == '__main__':
     print(test_data.shape)
 
     X_train = train_data[:,0:10]
+    # Y_train = train_data[:,10]
+
     Y_train = train_data[:,10].astype('int')
 
     X_test = test_data[:,0:10]
+    # Y_test = test_data[:,10]
     Y_test = test_data[:,10].astype('int')
     
     # Read data
@@ -259,7 +265,7 @@ if __name__ == '__main__':
     print('er_train', er_train)
     print('er_test', er_test)
 
-    x_range = range(0, 40, 5)
+    x_range = range(0, 40, 1)
     for i in x_range:    
         er_i = adaboost_clf(Y_train, X_train, Y_test, X_test, i, clf_tree)
         print('er_i'+ str(i) +'-->', er_i)
