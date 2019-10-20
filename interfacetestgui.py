@@ -2961,7 +2961,7 @@ class showFeature:
         self.Button10.configure(highlightbackground="#d9d9d9")
         self.Button10.configure(highlightcolor="black")
         self.Button10.configure(relief="raised")
-        self.Button10.configure(text='''Next Page''')
+        self.Button10.configure(text='''Predict''')
         self.Button10.configure(command=self.predict)
 
         self.Message1 = tk.Message(self.Frame2)
@@ -3099,59 +3099,162 @@ class showFeature:
 
     def predict(self, top=None):
         global cusdata 
-        namR = []
-        cusdata = []
+    #kjfsjf
+        # namR = []
+        # cusdata = []
+        # if modelctrl ==  1 or modelctrl == 3:
+        #     namR.append(self.Entry1.get())
+        #     namR.append(self.Entry2.get())
+        #     namR.append(self.Entry3.get())
+        #     namR.append(self.Entry4.get())
+        #     namR.append(self.Entry5.get())
+        #     namR.append(self.Entry6.get())
+        #     namR.append(self.Entry7.get())
+        #     namR.append(self.Entry8.get())
+        #     namR.append(self.Entry9.get())
+        #     namR.append(self.Entry10.get())
+        #     namR.append(self.Entry11.get())
+        #     namR.append(self.Entry12.get())
+        #     namR.append(self.Entry13.get())
+        #     namR.append(self.Entry14.get())
+        #     namR.append(self.Entry15.get())
+        #     namR.append(self.Entry16.get())
+        #     namR.append(self.Entry17.get())
+        #     namR.append(self.Entry18.get())
+        #     namR.append(self.Entry19.get())
+        #     namR.append(self.Entry20.get())
+        #     namR.append(self.Entry21.get())
+        #     namR.append(self.Entry22.get())
+        #     namR.append(self.Entry23.get())
+        #     namR.append(self.Entry24.get())
+        #     namR.append(self.Entry25.get())
+        #     namR.append(self.Entry26.get())
+        #     namR.append(self.Entry27.get())
+        #     namR.append(self.Entry28.get())
+        #     namR.append(self.Entry29.get())
+        #     namR.append(self.Entry30.get())
+        #     namR.append(self.Entry31.get())
+        #     namR.append(self.Entry32.get())
+        #     namR.append(self.Entry33.get())
+        #     namR.append(self.Entry34.get())
+        #     namR.append(self.Entry35.get())
+        #     namR.append(self.Entry36.get())
+        #     namR.append(self.Entry37.get())
+        # if modelctrl ==  2 or modelctrl == 4:
+        #     namR.append(self.Entry1.get())
+        #     namR.append(self.Entry2.get())
+        #     namR.append(self.Entry3.get())
+        #     namR.append(self.Entry4.get())
+        #     namR.append(self.Entry5.get())
+        #     namR.append(self.Entry6.get())
+        #     namR.append(self.Entry7.get())
+        #     namR.append(self.Entry8.get())
+        #     namR.append(self.Entry9.get())
+        #     namR.append(self.Entry10.get())
+        # cusdata.append(namR)
+        # print('pre_dataset.columns.len',len(pre_dataset.columns))
+    #  
+        cusdata = np.zeros(len(pre_dataset.columns)-1).reshape(1,len(pre_dataset.columns)-1)
+
         if modelctrl ==  1 or modelctrl == 3:
-            namR.append(self.Entry1.get())
-            namR.append(self.Entry2.get())
-            namR.append(self.Entry3.get())
-            namR.append(self.Entry4.get())
-            namR.append(self.Entry5.get())
-            namR.append(self.Entry6.get())
-            namR.append(self.Entry7.get())
-            namR.append(self.Entry8.get())
-            namR.append(self.Entry9.get())
-            namR.append(self.Entry10.get())
-            namR.append(self.Entry11.get())
-            namR.append(self.Entry12.get())
-            namR.append(self.Entry13.get())
-            namR.append(self.Entry14.get())
-            namR.append(self.Entry15.get())
-            namR.append(self.Entry16.get())
-            namR.append(self.Entry17.get())
-            namR.append(self.Entry18.get())
-            namR.append(self.Entry19.get())
-            namR.append(self.Entry20.get())
-            namR.append(self.Entry21.get())
-            namR.append(self.Entry22.get())
-            namR.append(self.Entry23.get())
-            namR.append(self.Entry24.get())
-            namR.append(self.Entry25.get())
-            namR.append(self.Entry26.get())
-            namR.append(self.Entry27.get())
-            namR.append(self.Entry28.get())
-            namR.append(self.Entry29.get())
-            namR.append(self.Entry30.get())
-            namR.append(self.Entry31.get())
-            namR.append(self.Entry32.get())
-            namR.append(self.Entry33.get())
-            namR.append(self.Entry34.get())
-            namR.append(self.Entry35.get())
-            namR.append(self.Entry36.get())
-            namR.append(self.Entry37.get())
+            if self.Entry1.get() != "":
+                cusdata[0][0] = self.Entry1.get()
+            if self.Entry2.get() != "":            
+                cusdata[0][1] = self.Entry2.get()
+            if self.Entry3.get() != "":
+                cusdata[0][2] = self.Entry3.get()
+            if self.Entry4.get() != "":
+                cusdata[0][3] = self.Entry4.get()
+            if self.Entry5.get() != "":
+                cusdata[0][4] = self.Entry5.get()
+            if self.Entry6.get() != "":
+                cusdata[0][5] = self.Entry6.get()
+            if self.Entry7.get() != "":
+                cusdata[0][6] = self.Entry7.get()
+            if self.Entry8.get() != "":
+                cusdata[0][7] = self.Entry8.get()
+            if self.Entry9.get() != "":
+                cusdata[0][8] = self.Entry9.get()
+            if self.Entry10.get() != "":
+                cusdata[0][9] = self.Entry10.get()
+            if self.Entry11.get() != "":
+                cusdata[0][10] = self.Entry11.get()
+            if self.Entry12.get() != "":
+                cusdata[0][11] = self.Entry12.get()
+            if self.Entry13.get() != "":
+                cusdata[0][12] = self.Entry13.get()
+            if self.Entry14.get() != "":
+                cusdata[0][13] = self.Entry14.get()
+            if self.Entry15.get() != "":
+                cusdata[0][14] = self.Entry15.get()
+            if self.Entry16.get() != "":
+                cusdata[0][15] = self.Entry16.get()
+            if self.Entry17.get() != "":
+                cusdata[0][16] = self.Entry17.get()
+            if self.Entry18.get() != "":
+                cusdata[0][17] = self.Entry18.get()
+            if self.Entry19.get() != "":
+                cusdata[0][18] = self.Entry19.get()
+            if self.Entry20.get() != "":
+                cusdata[0][19] = self.Entry20.get()
+            if self.Entry21.get() != "":
+                cusdata[0][20] = self.Entry21.get()
+            if self.Entry22.get() != "":
+                cusdata[0][21] = self.Entry22.get()
+            if self.Entry23.get() != "":
+                cusdata[0][22] = self.Entry23.get()
+            if self.Entry24.get() != "":
+                cusdata[0][23] = self.Entry24.get()
+            if self.Entry25.get() != "":
+                cusdata[0][24] = self.Entry25.get()
+            if self.Entry26.get() != "":
+                cusdata[0][25] = self.Entry26.get()
+            if self.Entry27.get() != "":
+                cusdata[0][26] = self.Entry27.get()
+            if self.Entry28.get() != "":
+                cusdata[0][27] = self.Entry28.get()
+            if self.Entry29.get() != "":
+                cusdata[0][28] = self.Entry29.get()
+            if self.Entry30.get() != "":
+                cusdata[0][29] = self.Entry30.get()
+            if self.Entry31.get() != "":
+                cusdata[0][30] = self.Entry31.get()
+            if self.Entry32.get() != "":
+                cusdata[0][31] = self.Entry32.get()
+            if self.Entry33.get() != "":
+                cusdata[0][32] = self.Entry33.get()
+            if self.Entry34.get() != "":
+                cusdata[0][33] = self.Entry34.get()
+            if self.Entry35.get() != "":
+                cusdata[0][34] = self.Entry35.get()
+            if self.Entry36.get() != "":
+                cusdata[0][35] = self.Entry36.get()
+            if self.Entry37.get() != "":
+                cusdata[0][36] = self.Entry37.get()
         if modelctrl ==  2 or modelctrl == 4:
-            namR.append(self.Entry1.get())
-            namR.append(self.Entry2.get())
-            namR.append(self.Entry3.get())
-            namR.append(self.Entry4.get())
-            namR.append(self.Entry5.get())
-            namR.append(self.Entry6.get())
-            namR.append(self.Entry7.get())
-            namR.append(self.Entry8.get())
-            namR.append(self.Entry9.get())
-            namR.append(self.Entry10.get())
-        cusdata.append(namR)
-        print('pre_dataset.columns.len',len(pre_dataset.columns))
+            print('FE00', feature_extraction[0][0])
+            print (cusdata[0][feature_extraction[0][0]])
+
+            if self.Entry1.get() != "":
+                cusdata[0][feature_extraction[0][0]] = self.Entry1.get()
+            if self.Entry2.get() != "":            
+                cusdata[0][feature_extraction[0][1]] = self.Entry2.get()
+            if self.Entry3.get() != "":
+                cusdata[0][feature_extraction[0][2]] = self.Entry3.get()
+            if self.Entry4.get() != "":
+                cusdata[0][feature_extraction[0][3]] = self.Entry4.get()
+            if self.Entry5.get() != "":
+                cusdata[0][feature_extraction[0][4]] = self.Entry5.get()
+            if self.Entry6.get() != "":
+                cusdata[0][feature_extraction[0][5]] = self.Entry6.get()
+            if self.Entry7.get() != "":
+                cusdata[0][feature_extraction[0][6]] = self.Entry7.get()
+            if self.Entry8.get() != "":
+                cusdata[0][feature_extraction[0][7]] = self.Entry8.get()
+            if self.Entry9.get() != "":
+                cusdata[0][feature_extraction[0][8]] = self.Entry9.get()
+            if self.Entry10.get() != "":
+                cusdata[0][feature_extraction[0][9]] = self.Entry10.get()
 
         # from sklearn.preprocessing import KBinsDiscretizer
         # est = KBinsDiscretizer(n_bins=3, encode='ordinal', strategy='kmeans')  #uniform, quantile, kmeans
@@ -4146,7 +4249,37 @@ class outcome:
                                                         [x * alpha_m for x in pred_test_i])]
                     pred_train, pred_test = np.sign(pred_train), np.sign(pred_test)
     def custestfun(self, top=None):
+        global discretize_cusdata
+        global discretize_cusmrmrdata
+
+        discretize_cusdata = np.arange(len(pre_dataset.columns)-1).reshape(1,len(pre_dataset.columns)-1)
+        discretize_cusmrmrdata = np.arange(10).reshape(1,10)
+
+        print ('1discretize_cusdata', discretize_cusdata)
+
         print ('cusdata', cusdata)
+        print(cusdata.shape)
+
+        print(feature_data.shape)
+        feature_binddata = np.append(cusdata, feature_data, axis=0)
+        print('feature_binddata', feature_binddata)
+
+        discretize_binddata = main_discretize(feature_binddata)
+        print ('discretize_binddata', discretize_binddata)
+
+        # if modelctrl ==  1 or modelctrl == 3:
+        discretize_cusdata[0] = discretize_binddata[0,:]
+        print ('1,3discretize_cusdata', discretize_cusdata)
+
+    # if modelctrl ==  2 or modelctrl == 4:
+        for i in range(10):
+            discretize_cusmrmrdata[0][i] = discretize_cusdata[0][feature_extraction[0][i]]
+                # discretize_cusmrmrdata[0][i] = discretize_binddata[discretize_binddata.shape[0]-1][feature_extraction[0][i]]
+            
+        print ('2,discretize_cusmrmrdata', discretize_cusmrmrdata)
+
+
+
         global concat_data
       
         if modelctrl == 1 or modelctrl == 3:
@@ -4171,7 +4304,7 @@ class outcome:
             Y_train = train_data[:,37].astype('int')
             # X_test = test_data[:,0:37]
             # Y_test = test_data[:,37].astype('int')
-            X_test = cusdata
+            X_test = discretize_cusdata
             Y_test = 0
 
         if modelctrl == 2 or modelctrl == 4:
@@ -4180,7 +4313,7 @@ class outcome:
 
             # X_test = test_data[:,0:10]
             # Y_test = test_data[:,10].astype('int')
-            X_test = cusdata
+            X_test = discretize_cusmrmrdata
             Y_test = 0
 
         clf_tree = SVC(kernel='rbf', random_state=0, gamma=.01, C=10000)

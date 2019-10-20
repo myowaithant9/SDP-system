@@ -7,17 +7,6 @@ from sklearn.metrics import confusion_matrix
 
 """ Discretization SCRIPT ============================================================="""
 def main_preprocess(dataset_path, datactrl):
-    # dataset_path = 'PC3.csv'
-#     if datactrl == 1:
-#         col_count = 37
-#     if datactrl == 2:
-#         col_count = 40        
-#     if datactrl == 3:
-#         col_count = 37
-#     if datactrl == 4:
-#         col_count = 37
-#     if datactrl == 5:
-#          col_count = 38 
     col_count = 37            
 
     dataset = pd.read_csv(dataset_path)
@@ -53,7 +42,10 @@ def main_discretize(feature_data):
 
     est = KBinsDiscretizer(n_bins=3, encode='ordinal', strategy='kmeans')  #uniform, quantile, kmeans
     est.fit(feature_data)
+    print("est.fit", est.fit(feature_data))
     discretize_data = est.transform(feature_data)
+    print("est.transform", est.transform(feature_data))
+
     discretize_data = discretize_data.astype(int)
     return discretize_data
 

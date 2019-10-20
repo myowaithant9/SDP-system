@@ -125,6 +125,7 @@ def plot_error_rate(er_train, er_test):
 """ Preprocess SCRIPT ============================================================="""
 def preprocess(dataset_path):
     # dataset_path = 'PC3.csv'
+    global dataset
     dataset = pd.read_csv(dataset_path)
     np.set_printoptions(formatter={'float_kind':'{:0f}'.format})
 
@@ -185,7 +186,7 @@ def concat(selected_data, target_data):
 """ MAIN SCRIPT ============================================================="""
 if __name__ == '__main__':
 
-    dataset_path = 'MDP csv/PC2clean.csv'
+    dataset_path = 'MDP csv/PC02.csv'
     feature_data, target_data = preprocess(dataset_path)
     print('feature_data')
     print(feature_data)
@@ -206,7 +207,17 @@ if __name__ == '__main__':
     print('\n')
     print("*** Selected Feature ***")
     print(feature_extraction)
-    
+    print(dataset.columns[feature_extraction[0][0]])
+    print(dataset.columns[feature_extraction[0][1]])
+    print(dataset.columns[feature_extraction[0][2]])
+    print(dataset.columns[feature_extraction[0][3]])
+    print(dataset.columns[feature_extraction[0][4]])
+    print(dataset.columns[feature_extraction[0][5]])
+    print(dataset.columns[feature_extraction[0][6]])
+    print(dataset.columns[feature_extraction[0][7]])
+    print(dataset.columns[feature_extraction[0][8]])
+    print(dataset.columns[feature_extraction[0][9]])
+
     selected_data = discretize_data[:, feature_extraction[0]]  #=> transform manual to auto
     concat_data = concat(selected_data, target_data)
     print('\n')

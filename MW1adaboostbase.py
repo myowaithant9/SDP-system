@@ -226,6 +226,7 @@ if __name__ == '__main__':
 
     X_test = test_data[:,0:10]
     Y_test = test_data[:,10].astype('int')
+    print("X_test", X_test)
     
     # Read data
     # x, y = make_hastie_10_2()
